@@ -33,16 +33,16 @@ function ShaderParticleEmitter( options ) {
     that.velocitySpread         = options.velocitySpread instanceof THREE.Vector3 ? options.velocitySpread : new THREE.Vector3();
 
     // And again here; only used when this.type === 'sphere'
-    that.speed                  = parseFloat( typeof options.speed === 'number' ? options.speed : 0, 10 );
-    that.speedSpread            = parseFloat( typeof options.speedSpread === 'number' ? options.speedSpread : 0, 10 );
+    that.speed                  = parseFloat( typeof options.speed === 'number' ? options.speed : 0 );
+    that.speedSpread            = parseFloat( typeof options.speedSpread === 'number' ? options.speedSpread : 0 );
 
-    that.sizeStart              = parseFloat( typeof options.sizeStart === 'number' ? options.sizeStart : 1.0, 10 );
-    that.sizeStartSpread        = parseFloat( typeof options.sizeStartSpread === 'number' ? options.sizeStartSpread : 0.0, 10 );
-    that.sizeEnd                = parseFloat( typeof options.sizeEnd === 'number' ? options.sizeEnd : that.sizeStart, 10 );
+    that.sizeStart              = parseFloat( typeof options.sizeStart === 'number' ? options.sizeStart : 1.0 );
+    that.sizeStartSpread        = parseFloat( typeof options.sizeStartSpread === 'number' ? options.sizeStartSpread : 0.0 );
+    that.sizeEnd                = parseFloat( typeof options.sizeEnd === 'number' ? options.sizeEnd : that.sizeStart );
 
-	that.angle                  = parseFloat( typeof options.angle === 'number' ? options.angle : 0, 10 );
-    that.angleSpread            = parseFloat( typeof options.angleSpread === 'number' ? options.angleSpread : 0, 10 );
-    that.angleVelocity          = parseFloat( typeof options.angleVelocity === 'number' ? options.angleVelocity : 0, 10 );
+	that.angle                  = parseFloat( typeof options.angle === 'number' ? options.angle : 0 );
+    that.angleSpread            = parseFloat( typeof options.angleSpread === 'number' ? options.angleSpread : 0 );
+    that.angleVelocity          = parseFloat( typeof options.angleVelocity === 'number' ? options.angleVelocity : 0 );
     that.angleAlignVelocity     = options.angleAlignVelocity || false;
 
     that.colorStart             = options.colorStart instanceof THREE.Color ? options.colorStart : new THREE.Color( 'white' );
@@ -51,20 +51,20 @@ function ShaderParticleEmitter( options ) {
 	that.colorMiddle			= options.colorMiddle instanceof THREE.Color ? options.colorMiddle :
 		new THREE.Color().addColors( that.colorStart, that.colorEnd ).multiplyScalar( 0.5 );
 
-    that.opacityStart           = parseFloat( typeof options.opacityStart !== 'undefined' ? options.opacityStart : 1, 10 );
-    that.opacityEnd             = parseFloat( typeof options.opacityEnd === 'number' ? options.opacityEnd : 0, 10 );
+    that.opacityStart           = parseFloat( typeof options.opacityStart !== 'undefined' ? options.opacityStart : 1 );
+    that.opacityEnd             = parseFloat( typeof options.opacityEnd === 'number' ? options.opacityEnd : 0 );
     that.opacityMiddle          = parseFloat(
         typeof options.opacityMiddle !== 'undefined' ?
         options.opacityMiddle :
         Math.abs(that.opacityEnd + that.opacityStart) / 2,
-    10 );
+    );
 
-    that.particleMass           = parseFloat( typeof options.particleMass === 'number' ? options.particleMass : 0, 10 );
+    that.particleMass           = parseFloat( typeof options.particleMass === 'number' ? options.particleMass : 0 );
 
     that.emitterDuration        = typeof options.emitterDuration === 'number' ? options.emitterDuration : null;
     that.alive                  = parseInt( typeof options.alive === 'number' ? options.alive : 1, 10);
 
-    that.static                 = typeof options.static === 'number' ? options.static : 0;
+    that.isStatic               = typeof options.isStatic === 'number' ? options.isStatic : 0;
 
     // The following properties are used internally, and mostly set when this emitter
     // is added to a particle group.
@@ -91,7 +91,7 @@ ShaderParticleEmitter.prototype = {
      * @param  {THREE.Vector3} p
      */
      _resetParticle: function( i ) {
-        var that = this;
+        var that = this,
             type = that.type,
             spread = that.positionSpread,
             particlePosition = that.vertices[i],
@@ -180,7 +180,7 @@ ShaderParticleEmitter.prototype = {
      */
     tick: function( dt ) {
 
-        if( this.static ) {
+        if( this.isStatic ) {
             return;
         }
 
@@ -247,7 +247,7 @@ ShaderParticleEmitter.prototype = {
         }
 
         if( pIndex >= start + that.numParticles ) {
-            that.particleIndex = parseFloat( start, 10 );
+            that.particleIndex = parseFloat( start );
         }
 
         // Add the delta time value to the age of the emitter.

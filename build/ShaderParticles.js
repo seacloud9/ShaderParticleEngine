@@ -429,11 +429,11 @@ ShaderParticleGroup.prototype = {
             colorMiddle     = a.colorMiddle.value,
             colorEnd        = a.colorEnd.value,
             opacityStart    = a.opacityStart.value,
-            opacityMiddle   = a.opacityMiddle.value;
+            opacityMiddle   = a.opacityMiddle.value,
             opacityEnd      = a.opacityEnd.value,
             particleMass    = a.particleMass.value;
 
-        emitter.particleIndex = parseFloat( start, 10 );
+        emitter.particleIndex = parseFloat( start );
 
         // Create the values
         for( var i = start; i < end; ++i ) {
@@ -466,7 +466,7 @@ ShaderParticleGroup.prototype = {
             particleMass[i]     = emitter.particleMass;
 
             age[i]              = 0.0;
-            alive[i]            = emitter.static ? 1.0 : 0.0;
+            alive[i]            = emitter.isStatic ? 1.0 : 0.0;
 
             colorStart[i]       = that._randomColor( emitter.colorStart, emitter.colorStartSpread );
             colorMiddle[i]      = emitter.colorMiddle;
@@ -484,7 +484,7 @@ ShaderParticleGroup.prototype = {
         emitter.maxAge          = that.maxAge;
 
         // Save this emitter in an array for processing during this.tick()
-        if( !emitter.static ) {
+        if( !emitter.isStatic ) {
             that.emitters.push( emitter );
         }
 

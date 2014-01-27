@@ -18,6 +18,51 @@ SPE.Emitter = function( options ) {
     // but should still be readable enough!
     var that = this;
 
+    that.options = {
+        particlesPerSecond: 100,
+        type: 'cube',
+
+        position: new THREE.Vector3(),
+        positionSpread: new THREE.Vector3(),
+
+        radius: 10,
+        radiusSpread: 0,
+        radiusSpreadClamp: 0,
+        radiusScale: new THREE.Vector3( 1, 1, 1 ),
+
+        acceleration: new THREE.Vector3(),
+        accelerationSpread: new THREE.Vector3(),
+
+        velocity: new THREE.Vector3(),
+        velocitySpread: new THREE.Vector3(),
+
+        speed: 0.0,
+        speedSpread: 0.0,
+
+        sizeStart: 1.0,
+        sizeStartSpread: 0.0,
+        sizeMiddle: 1.0,
+        sizeEnd: 1.0,
+
+        angle: 0.0,
+        angleSpread: 0.0,
+        angleAlignVelocity: false,
+
+        colorStart: new THREE.Color( 'white' ),
+        colorStartSpread: new THREE.Vector3(),
+        colorMiddle: new THREE.Color( 'white' ),
+        colorEnd: new THREE.Color( 'white' ),
+
+        opacityStart: 0.0,
+        opacityMiddle: 1.0,
+        opacityEnd: 0.0,
+
+        emitterDuration: null,
+        alive: 1,
+        isStatic: 0
+        isDynamic: 0
+    };
+
 
     that.particlesPerSecond     = typeof options.particlesPerSecond === 'number' ? options.particlesPerSecond : 100;
     that.type                   = (options.type === 'cube' || options.type === 'sphere' || options.type === 'disk') ? options.type : 'cube';

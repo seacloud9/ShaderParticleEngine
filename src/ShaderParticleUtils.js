@@ -1,6 +1,18 @@
-var shaderParticleUtils = {
+// ShaderParticleGroup 0.7.4
+//
+// (c) 2013 Luke Moody (http://www.github.com/squarefeet)
+//     & Lee Stemkoski (http://www.adelphi.edu/~stemkoski/)
+//
+// Based on Lee Stemkoski's original work:
+//    (https://github.com/stemkoski/stemkoski.github.com/blob/master/Three.js/js/ParticleEngine.js).
+//
+// ShaderParticleGroup may be freely distributed under the MIT license (See LICENSE.txt)
 
-	/**
+var SPE = SPE || {};
+
+SPE.utils = {
+
+    /**
      * Given a base vector and a spread range vector, create
      * a new THREE.Vector3 instance with randomised values.
      *
@@ -22,7 +34,7 @@ var shaderParticleUtils = {
         return v;
     },
 
-	/**
+    /**
      * Create a new THREE.Color instance and given a base vector and
      * spread range vector, assign random values.
      *
@@ -64,7 +76,7 @@ var shaderParticleUtils = {
         return base + spread * (Math.random() - 0.5);
     },
 
-	/**
+    /**
      * Create a new THREE.Vector3 instance and project it onto a random point
      * on a sphere with randomized radius.
      *
@@ -121,15 +133,15 @@ var shaderParticleUtils = {
             rand = Math.round( rand / radiusSpreadClamp ) * radiusSpreadClamp;
         }
 
-		var vec = new THREE.Vector3( Math.cos(t), Math.sin(t), 0 ).multiplyScalar( rand );
+        var vec = new THREE.Vector3( Math.cos(t), Math.sin(t), 0 ).multiplyScalar( rand );
 
-		if ( radiusScale ) {
-			vec.multiply( radiusScale );
-		}
+        if ( radiusScale ) {
+            vec.multiply( radiusScale );
+        }
 
-		vec.add( base );
+        vec.add( base );
 
-		return vec ;
+        return vec ;
     },
 
 
@@ -142,13 +154,12 @@ var shaderParticleUtils = {
      * @param  {Number} speed
      * @param  {Number} speedSpread
      * @param  {THREE.Vector3} scale
-     * @param  {Number} radius
      *
      * @private
      *
      * @return {THREE.Vector3}
      */
-    randomVelocityVector3OnSphere: function( base, position, speed, speedSpread, scale, radius ) {
+    randomVelocityVector3OnSphere: function( base, position, speed, speedSpread, scale ) {
         var direction = new THREE.Vector3().subVectors( base, position );
 
         direction.normalize().multiplyScalar( Math.abs( this._randomFloat( speed, speedSpread ) ) );
@@ -207,7 +218,7 @@ var shaderParticleUtils = {
         v.b = Math.max( 0, Math.min( v.b, 1 ) );
     },
 
-	/**
+    /**
      * Given an existing particle vector, project it onto a random point on a
      * sphere with radius `radius` and position `base`.
      *
@@ -218,9 +229,8 @@ var shaderParticleUtils = {
      * @param  {Number} radius
      */
     randomizeExistingVector3OnSphere: function( v, base, radius, radiusSpread, radiusScale, radiusSpreadClamp ) {
-        var rand = Math.random,
-            z = 2 * rand() - 1,
-            t = 6.2832 * rand(),
+        var z = 2 * Math.random() - 1,
+            t = 6.2832 * Math.random(),
             r = Math.sqrt( 1 - z*z ),
             rand = this._randomFloat( radius, radiusSpread );
 
@@ -249,8 +259,7 @@ var shaderParticleUtils = {
      * @param  {Number} radius
      */
     randomizeExistingVector3OnDisk: function( v, base, radius, radiusSpread, radiusScale, radiusSpreadClamp ) {
-        var rand = Math.random,
-            t = 6.2832 * rand(),
+        var t = 6.2832 * Math.random(),
             rand = Math.abs( this._randomFloat( radius, radiusSpread ) );
 
         if( radiusSpreadClamp ) {
@@ -263,17 +272,30 @@ var shaderParticleUtils = {
             0
         ).multiplyScalar( rand );
 
-		if ( radiusScale ) {
-			v.multiply( radiusScale );
-		}
+        if ( radiusScale ) {
+            v.multiply( radiusScale );
+        }
 
         v.add( base );
     },
 
-	randomizeExistingVelocityVector3OnSphere: function( v, base, position, speed, speedSpread ) {
+    randomizeExistingVelocityVector3OnSphere: function( v, base, position, speed, speedSpread ) {
         v.copy(position)
             .sub(base)
             .normalize()
             .multiplyScalar( Math.abs( this._randomFloat( speed, speedSpread ) ) );
     },
+
+    generateID: function() {
+        var str = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx';
+
+        str = str.replace(/[xy]/g, function(c) {
+            var rand = Math.random();
+            var r = rand*16|0%16, v = c === 'x' ? r : (r&0x3|0x8);
+
+            return v.toString(16);
+        });
+
+        return str;
+    }
 };

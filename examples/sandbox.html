@@ -1,29 +1,29 @@
-<!-- A seperate test file to play around with whilst doing updates/bug fixes -->
 <html>
 <head>
-	<title>Basic Shader Particles</title>
-	<link rel="stylesheet" type="text/css" href="./css/style.css">
+    <title>Basic Shader Particles</title>
+    <link rel="stylesheet" type="text/css" href="./css/style.css">
 </head>
 <body>
-	<p class="numParticles"></p>
+    <p class="numParticles"></p>
 
-	<!-- THREE.min.js r60 and FPS stats -->
-	<script type="text/javascript" src="./js/THREE-r60.min.js"></script>
-	<script type="text/javascript" src="./js/Stats.min.js"></script>
+    <!-- THREE.min.js r60 and FPS stats -->
+    <script type="text/javascript" src="./js/THREE-r65.min.js"></script>
+    <script type="text/javascript" src="./js/Stats.min.js"></script>
 
-	<!-- ShaderParticles -->
-	<script type="text/javascript" src="../src/ShaderParticleEmitter.js"></script>
+    <!-- ShaderParticles -->
+    <script type="text/javascript" src="../src/ShaderParticleUtils.js"></script>
     <script type="text/javascript" src="../src/ShaderParticleGroup.js"></script>
+    <script type="text/javascript" src="../src/ShaderParticleEmitter.js"></script>
 
 
-	<script type="text/javascript">
-		// variables used in init()
+    <script type="text/javascript">
+        // variables used in init()
         var scene, camera, renderer, stats, stats2, clock;
 
         // Used in initParticles()
-		var emitter, particleGroup;
+        var emitter, particleGroup;
 
-		// Setup the scene
+        // Setup the scene
         function init() {
             scene = new THREE.Scene();
             camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 10000);
@@ -46,82 +46,122 @@
 
         // Create particle group and emitter
         function initParticles() {
-        	particleGroup = new ShaderParticleGroup({
-        		texture: THREE.ImageUtils.loadTexture('./img/bullet.png'),
-        		maxAge: 1,
-                blending: THREE.NormalBlending
-        	});
+            particleGroup = new SPE.Group({
+                texture: THREE.ImageUtils.loadTexture('./img/smokeparticle.png'),
+                maxAge: 50,
+                // blending: THREE.NormalBlending,
+                // colorize: 1,
+                // fixedTimeStep: 0.005
+            });
 
-        	emitter = new ShaderParticleEmitter({
-                type: 'disk',
-                position: new THREE.Vector3(0, 0, 0),
-                radius: 50,
-                radiusSpread: 0,
-                speed: 50,
-                speedSpread: 0,
-                colorStart: new THREE.Color('yellow'),
-                colorEnd: new THREE.Color('red'),
+            emitter = new SPE.Emitter({
+                type: 'cube',
+
+                position: new THREE.Vector3(0, 50, 0),
+                positionSpread: new THREE.Vector3( 0, 0, 0 ),
+
+                velocity: new THREE.Vector3(1, 0, 0),
+                velocitySpread: new THREE.Vector3(0.01, 0.01, 0.01),
+
+                // Color tests
+                colorStart: new THREE.Color( 'green' ),
+                colorStartSpread: new THREE.Vector3( 0, 0.5, 0 ),
+
+                colorMiddle: new THREE.Color( 'red' ),
+                colorMiddleSpread: new THREE.Vector3( 0.5, 0.5, 0.5 ),
+
+                colorEnd: new THREE.Color( 'yellow' ),
+                colorEndSpread: new THREE.Vector3( 0, 0, 0 ),
+
+                // Size tests
+                sizeStart: 5,
+                sizeStartSpread: 4,
+
+                sizeMiddle: 5,
+                sizeMiddleSpread: 4,
+
+                sizeEnd: 30,
+                sizeEndSpread: 4,
+
+                // Opacity tests
                 opacityStart: 0,
+                opacityStartSpread: 0,
+                
                 opacityMiddle: 1,
+                opacityMiddleSpread: 0,
+
                 opacityEnd: 0,
-                size: 20,
-                sizeEnd: 20,
-                angle: 0,
-                // angleSpread: 2 * Math.PI, // use for random direction
-                angleAlignVelocity : true,
-                particlesPerSecond: 1000
-        	});
+                opacityEndSpread: 0,
 
-        	particleGroup.addEmitter( emitter );
-        	scene.add( particleGroup.mesh );
+                particleCount: 50000,
 
-        	document.querySelector('.numParticles').textContent =
-        		'Total particles: ' + emitter.numParticles;
+                hasGravity: 1,
+                particleMass: 90,
+                planetPosition: new THREE.Vector3( 0, 0, 0 ),
+
+                // Angle tests
+                // angleStart: Math.PI * 0.5,
+                // angleStartSpread: Math.PI * 2,
+
+                // angleMiddle: 0,
+                // angleMiddleSpread: Math.PI * 2,
+
+                // angleEnd: Math.PI * 1.5,
+                // angleEndSpread: Math.PI * 1.5
+            });
+
+            particleGroup.addEmitter( emitter );
+            scene.add( particleGroup.mesh );
+
+            document.querySelector('.numParticles').textContent =
+                'Total particles: ' + emitter.particleCount;
         }
 
+        function updateCamera() {
+            var now = Date.now() * 0.0003,
+                emitterNow = Date.now() * 0.005;
 
+            camera.position.x = Math.sin( now ) * 600;
+            camera.position.y = Math.cos( now ) * 600;
+            camera.position.z = Math.cos( now ) * 600;
+
+            emitter.position.x = Math.sin( emitterNow ) * 100;
+            emitter.position.z = Math.cos( emitterNow ) * 100;
+            camera.lookAt( scene.position );
+        }
 
         function animate() {
             requestAnimationFrame( animate );
 
-            // setTimeout( animate, 1 );
-
+            // Use a fixed time-step here to avoid gaps
             render( clock.getDelta() );
+            updateCamera();
             stats.update();
-        }
-
-
-        function updateCamera() {
-            var now = Date.now() * 0.0003;
-            camera.position.x = Math.sin( now ) * 10;
-            camera.position.z = Math.cos( now ) * 10;
-            camera.lookAt( scene.position );
         }
 
 
         function render( dt ) {
             particleGroup.tick( dt );
-            // updateCamera();
             renderer.render( scene, camera );
         }
 
 
         window.addEventListener( 'resize', function() {
-        	var w = window.innerWidth,
-        		h = window.innerHeight;
+            var w = window.innerWidth,
+                h = window.innerHeight;
 
-        	camera.aspect = w / h;
-        	camera.updateProjectionMatrix();
+            camera.aspect = w / h;
+            camera.updateProjectionMatrix();
 
-        	renderer.setSize( w, h );
+            renderer.setSize( w, h );
         }, false );
 
         init();
         initParticles();
 
-        setTimeout(animate, 1000);
+        setTimeout(animate, 0);
 
-	</script>
+    </script>
 
 </body>
 </html>

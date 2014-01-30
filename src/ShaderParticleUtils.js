@@ -1,6 +1,16 @@
-(function() {
+// ShaderParticleGroup 0.7.4
+//
+// (c) 2013 Luke Moody (http://www.github.com/squarefeet)
+//     & Lee Stemkoski (http://www.adelphi.edu/~stemkoski/)
+//
+// Based on Lee Stemkoski's original work:
+//    (https://github.com/stemkoski/stemkoski.github.com/blob/master/Three.js/js/ParticleEngine.js).
+//
+// ShaderParticleGroup may be freely distributed under the MIT license (See LICENSE.txt)
 
-this.shaderParticleUtils = {
+var SPE = SPE || {};
+
+SPE.utils = {
 
     /**
      * Given a base vector and a spread range vector, create
@@ -397,5 +407,3 @@ this.shaderParticleUtils = {
         return str;
     }
 };
-
-}());

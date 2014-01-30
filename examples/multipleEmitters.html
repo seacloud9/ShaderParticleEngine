@@ -7,7 +7,7 @@
 	<p class="numParticles"></p>
 
 	<!-- THREE.min.js r60 and FPS stats -->
-	<script type="text/javascript" src="./js/THREE-r60.min.js"></script>
+	<script type="text/javascript" src="./js/THREE-r65.min.js"></script>
 	<script type="text/javascript" src="./js/Stats.min.js"></script>
 
 	<!-- ShaderParticles -->
@@ -48,13 +48,13 @@
 
         // Create particle group and emitter
         function initParticles() {
-        	particleGroup = new ShaderParticleGroup({
+        	particleGroup = new SPE.Group({
         		texture: THREE.ImageUtils.loadTexture('./img/smokeparticle.png'),
         		maxAge: 2
         	});
 
             for( var i = 0; i < numEmitters; ++i ) {
-            	emitter = new ShaderParticleEmitter({
+            	emitter = new SPE.Emitter({
             		position: new THREE.Vector3(
                         getRandomNumber(window.innerWidth/5),
                         getRandomNumber(window.innerHeight/5),
@@ -86,7 +86,7 @@
             		sizeStart: 2,
             		sizeEnd: 2,
 
-            		particlesPerSecond: 250,
+            		particleCount: 500,
 
                     opacityStart: 0,
                     opacityMiddle: 1,

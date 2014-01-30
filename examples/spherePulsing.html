@@ -7,7 +7,7 @@
 	<p class="numParticles"></p>
 
 	<!-- THREE.min.js r60 and FPS stats -->
-	<script type="text/javascript" src="./js/THREE-r60.min.js"></script>
+	<script type="text/javascript" src="./js/THREE-r65.min.js"></script>
 	<script type="text/javascript" src="./js/Stats.min.js"></script>
 
 	<!-- ShaderParticles -->
@@ -55,12 +55,12 @@
 
         // Create particle group and emitter
         function initParticles() {
-        	particleGroup = new ShaderParticleGroup({
+        	particleGroup = new SPE.Group({
         		texture: THREE.ImageUtils.loadTexture('./img/star.png'),
         		maxAge: 1
         	});
 
-        	emitter = new ShaderParticleEmitter({
+        	emitter = new SPE.Emitter({
                 type: 'sphere',
 
         		position: new THREE.Vector3(0, 0, 0),
@@ -78,7 +78,7 @@
                 opacityStart: 0,
                 opacityEnd: 1,
 
-        		particlesPerSecond: 50000
+        		particleCount: 50000
         	});
 
         	particleGroup.addEmitter( emitter );

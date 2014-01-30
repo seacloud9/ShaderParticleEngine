@@ -7,7 +7,7 @@
 	<p class="numParticles"></p>
 
 	<!-- THREE.min.js r60 and FPS stats -->
-	<script type="text/javascript" src="./js/THREE-r60.min.js"></script>
+	<script type="text/javascript" src="./js/THREE-r65.min.js"></script>
 	<script type="text/javascript" src="./js/Stats.min.js"></script>
 
 	<!-- ShaderParticles -->
@@ -46,13 +46,14 @@
 
         // Create particle group and emitter
         function initParticles() {
-        	particleGroup = new ShaderParticleGroup({
+        	particleGroup = new SPE.Group({
         		texture: THREE.ImageUtils.loadTexture('./img/smokeparticle.png'),
         		maxAge: 2
         	});
 
-        	emitter = new ShaderParticleEmitter({
+        	emitter = new SPE.Emitter({
         		position: new THREE.Vector3(0, 0, 0),
+                positionSpread: new THREE.Vector3( 0, 0, 0 ),
 
         		acceleration: new THREE.Vector3(0, -10, 0),
         		accelerationSpread: new THREE.Vector3( 10, 0, 10 ),
@@ -61,17 +62,19 @@
         		velocitySpread: new THREE.Vector3(10, 7.5, 10),
 
         		colorStart: new THREE.Color('white'),
-        		colorEnd: new THREE.Color('blue'),
+        		colorEnd: new THREE.Color('red'),
+
         		sizeStart: 1,
-        		sizeEnd: 2,
-        		particlesPerSecond: 1000
+        		sizeEnd: 1,
+
+        		particleCount: 2000
         	});
 
         	particleGroup.addEmitter( emitter );
         	scene.add( particleGroup.mesh );
 
         	document.querySelector('.numParticles').textContent =
-        		'Total particles: ' + emitter.numParticles;
+        		'Total particles: ' + emitter.particleCount;
         }
 
 

@@ -60,7 +60,9 @@ var particleGroup = new SPE.Group({
 
 	// How long should the particles live for? Measured in seconds.
 	maxAge: 5
-});
+}, game.THREE);
+
+// passin threeJS for use with voxeljs
 
 // Create a single emitter
 var particleEmitter = new SPE.Emitter({
